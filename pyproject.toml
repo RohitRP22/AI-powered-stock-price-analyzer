@@ -1,0 +1,14 @@
+[project]
+name = "ai-powered-stock-price-analyzer"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.9"
+dependencies = [
+    "bs4>=0.0.2",
+    "ipykernel>=6.29.5",
+    "ipython>=8.18.1",
+    "openai>=1.93.1",
+    "python-dotenv>=1.1.1",
+    "requests>=2.32.4",
+]

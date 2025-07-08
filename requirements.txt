@@ -1,0 +1,6 @@
+ipykernel
+requests
+python-dotenv
+bs4
+Ipython
+openai
