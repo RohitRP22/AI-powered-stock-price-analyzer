@@ -4,3 +4,4 @@ python-dotenv
 bs4
 Ipython
 openai
+streamlit
