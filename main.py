@@ -6,7 +6,7 @@ from IPython.display import Markdown, display
 from openai import OpenAI
 from urllib.parse import urlencode
 import datetime
-
+import pickle
 import streamlit as st
 
 
@@ -73,12 +73,19 @@ def display_analysis(stock_symbol):
     display(Markdown(analyze_stock_trends(stock_symbol)))
 
 st.header('Stock Price Analyzer')
+# Load the stocks data from the pickle file
+with open('stocks.pkl', 'rb') as f:
+    stocks = pickle.load(f)
 
-st.text_input('Enter Stock Symbol', key='stock_symbol', value='SBIN',
-              help='Enter the stock symbol you want to analyze, e.g., SBIN for State Bank of India.')
-
+stocks_name = stocks['Company Name'].values
+selected_stock = st.selectbox(
+    "Type or select a company name from the dropdown",
+    stocks_name
+)
+# Get the stock symbol based on the selected company name
+stock_symbol = stocks[stocks['Company Name'] == selected_stock]['Symbol'].values[0]
+st.session_state.stock_symbol = stock_symbol
 if st.button('Analyze'):
-    stock_symbol = st.session_state.stock_symbol.upper()
     if stock_symbol:
         try:
             analysis = analyze_stock_trends(stock_symbol)
