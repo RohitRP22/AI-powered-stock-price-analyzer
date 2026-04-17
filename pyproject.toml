@@ -6,6 +6,7 @@ readme = "README.md"
 requires-python = ">=3.9"
 dependencies = [
     "bs4>=0.0.2",
+    "groq>=1.0.0",
     "ipykernel>=6.29.5",
     "ipython>=8.18.1",
     "openai>=1.93.1",
@@ -13,4 +14,5 @@ dependencies = [
     "python-dotenv>=1.1.1",
     "requests>=2.32.4",
     "streamlit>=1.46.1",
+    "yfinance>=1.2.0",
 ]
