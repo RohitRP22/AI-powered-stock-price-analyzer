@@ -1,146 +1,96 @@
-### Project Overview
-This project provides an intelligent way to analyse any Indian stock using the ChatGPT-4o-mini API. It loads a list of all Indian stock market symbols and lets users select a stock via an interactive selectbox. The analyser then fetches real-time data, interprets trends, and generates clear insights in natural language, helping investors make informed decisions.
-
 # AI Powered Stock Price Analyzer 📈
 
-An intelligent web application that analyzes stock price trends using AI-powered insights. This tool fetches real-time stock data from Yahoo Finance and provides comprehensive analysis using OpenAI's GPT-4 model, making complex financial data accessible to beginners and experienced investors alike.
+A Streamlit-based stock analysis app that uses Yahoo Finance data and Groq's chat completion API to generate natural-language trend summaries and return calculations for Indian stocks.
+
+## 🔎 What this app does
+
+- Loads a list of companies from `stocks.pkl`
+- Lets you select a company name using a Streamlit dropdown
+- Fetches weekly historical stock data for the past year from Yahoo Finance using `yfinance`
+- Sends the stock table to Groq's chat API for AI-powered analysis
+- Displays the resulting Markdown analysis in the Streamlit app
 
 ## 🚀 Features
 
-- **Real-time Stock Data**: Fetches weekly stock data from Yahoo Finance for the past year
-- **AI-Powered Analysis**: Uses OpenAI's GPT-4 model to analyze stock trends and patterns
-- **User-Friendly Interface**: Clean Streamlit web interface with dropdown selection
-- **Comprehensive Database**: Includes thousands of stocks from the National Stock Exchange of India
-- **Beginner-Friendly**: Provides easy-to-understand explanations of complex financial data
-- **Return Calculations**: Automatically calculates expected returns over the analysis period
+- Weekly stock data retrieval for the last 12 months
+- Indian stock symbol support via `.NS` suffix
+- Company lookup from a preloaded `stocks.pkl` file
+- AI-generated insights and summary
+- Total return estimation over the selected period
 
-## 🛠️ Technology Stack
+## 🧩 Dependencies
 
-- **Backend**: Python 3.9+
-- **Web Framework**: Streamlit
-- **AI/ML**: OpenAI GPT-4 API
-- **Data Scraping**: BeautifulSoup4, Requests
-- **Data Processing**: Pandas
-- **Environment Management**: Python-dotenv
+The app relies on:
 
-## 📋 Prerequisites
+- Python 3.9+
+- `streamlit`
+- `yfinance`
+- `groq`
+- `python-dotenv`
+- `pandas`
+- `bs4`
+- `requests`
+- `ipython`
+- `ipykernel`
 
-Before running this application, make sure you have:
+These are defined in `requirements.txt` and `pyproject.toml`.
 
-- Python 3.9 or higher installed
-- An OpenAI API key (get one from [OpenAI Platform](https://platform.openai.com/))
-- Internet connection for fetching stock data
+## ⚙️ Setup
 
-## 🔧 Installation
+1. Clone the repository:
 
-1. **Clone the repository**
-   ```bash
-   git clone https://github.com/yourusername/ai-powered-stock-price-analyzer.git
-   cd ai-powered-stock-price-analyzer
-   ```
-
-2. **Install dependencies**
-   
-   Using pip:
-   ```bash
-   pip install -r requirements.txt
-   ```
-   
-   Or using uv (recommended):
-   ```bash
-   uv sync
-   ```
-
-3. **Set up environment variables**
-   
-   Create a `.env` file in the root directory:
-   ```env
-   OPENAI_API_KEY=your_openai_api_key_here
-   ```
-
-## 🚀 Usage
-
-1. **Run the application**
-   ```bash
-   streamlit run main.py
-   ```
-
-2. **Access the web interface**
-   - Open your browser and go to `http://localhost:8501`
-   - Select a company from the dropdown menu
-   - Click "Analyze" to get AI-powered stock analysis
-
-3. **View the analysis**
-   - The application will fetch the latest stock data
-   - AI will analyze trends, patterns, and provide insights
-   - Results include expected returns and beginner-friendly explanations
-
-## 📁 Project Structure
-
-```
-ai-powered-stock-price-analyzer/
-├── main.py                 # Main Streamlit application
-├── requirements.txt        # Python dependencies
-├── pyproject.toml         # Project configuration
-├── stocks.csv             # Stock database (CSV format)
-├── stocks.pkl             # Stock database (pickle format)
-├── .env                   # Environment variables (create this)
-├── .gitignore            # Git ignore file
-├── README.md             # This file
-└── llm/                  # Virtual environment directory
+```bash
+git clone https://github.com/RohitRP22/AI-powered-stock-price-analyzer.git
+cd "AI Powered Stock Price Analyzer"
 ```
 
-## 🔍 How It Works
+2. Install dependencies:
 
-1. **Data Fetching**: The application uses Yahoo Finance's historical data API to fetch weekly stock prices for the past year
-2. **Data Processing**: Raw HTML data is parsed and cleaned using BeautifulSoup
-3. **AI Analysis**: The cleaned data is sent to OpenAI's GPT-4 model for intelligent analysis
-4. **Results Display**: Analysis results are formatted in Markdown and displayed in the Streamlit interface
+```bash
+pip install -r requirements.txt
+```
 
-## 📊 Sample Analysis Output
+3. Add your Groq API key to a `.env` file in the project root:
 
-The AI provides comprehensive analysis including:
-- Stock price trends and patterns
-- Volatility analysis
-- Support and resistance levels
-- Expected returns calculation
-- Beginner-friendly explanations
-- Investment recommendations
+```env
+Groq_API_KEY=your_groq_api_key_here
+```
 
-## 🤝 Contributing
+## ▶️ Run the app
 
-Contributions are welcome! Please feel free to submit a Pull Request. For major changes, please open an issue first to discuss what you would like to change.
+```bash
+streamlit run main.py
+```
 
-## 📝 License
+Then open the Streamlit URL shown in the terminal (typically `http://localhost:8501`).
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+## 🧠 How it works
+
+1. The app initializes a `Groq` client with the API key from `.env`.
+2. `stocks.pkl` is loaded to populate the company dropdown.
+3. When you click `Analyze`, the app:
+   - resolves the stock symbol for the selected company
+   - appends `.NS` to target the Indian exchange
+   - downloads weekly historical prices for the past 365 days
+   - builds a prompt describing the stock table and analysis request
+   - sends the prompt to Groq's chat completion endpoint
+   - renders the returned Markdown in the Streamlit UI
+
+## 🧪 Notes
+
+- The app uses `stock_symbol + '.NS'` for Indian NSE tickers.
+- If `stocks.pkl` is missing or the ticker has no historical data, the app may raise an error.
+- The prompt asks the AI to analyze weekly open/high/low/close trends and calculate percentage returns.
+
+## 📁 Project files
+
+- `main.py` — application entrypoint and analysis workflow
+- `requirements.txt` — Python dependency list
+- `pyproject.toml` — package metadata
+- `stocks.csv` — stock list source (if present)
+- `stocks.pkl` — pickle file loaded by the app
+- `.env` — local environment variables (not committed)
 
 ## ⚠️ Disclaimer
 
-This tool is for educational and informational purposes only. It should not be considered as financial advice. Always do your own research and consult with a financial advisor before making investment decisions.
-
-## 🐛 Troubleshooting
-
-**Common Issues:**
-
-1. **OpenAI API Key Error**: Make sure your `.env` file contains a valid OpenAI API key
-2. **Stock Data Not Found**: Some stocks might not have sufficient historical data
-3. **Network Issues**: Ensure you have a stable internet connection for data fetching
-
-## 📞 Support
-
-If you encounter any issues or have questions, please:
-1. Check the troubleshooting section above
-2. Open an issue on GitHub
-3. Ensure you're using the latest version of the application
-
-## 🔄 Updates
-
-Stay updated with the latest features and improvements by:
-- Starring this repository
-- Watching for updates
-- Checking the releases page
-
----
-
-**Made with ❤️ for the investing community**
+This project is for educational purposes only. It is not financial advice. Always verify investment decisions with your own research and seek professional guidance before trading.
